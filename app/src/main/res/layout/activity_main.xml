@@ -25,38 +25,39 @@
             android:text="Large Text"
             android:id="@+id/txtViewQuestion"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.13" />
+            android:layout_weight="0.4" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button"
+            android:id="@+id/option1"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.13" />
+            android:layout_weight="0.15"
+            android:layout_marginTop="20dp"/>
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button2"
+            android:id="@+id/option2"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.13" />
+            android:layout_weight="0.15" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button3"
+            android:id="@+id/option3"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="0.13" />
+            android:layout_weight="0.15" />
 
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="New Button"
-            android:id="@+id/button4"
-            android:layout_weight="0.13" />
+            android:id="@+id/option4"
+            android:layout_weight="0.15" />
 
     </LinearLayout>
 </RelativeLayout>
