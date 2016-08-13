@@ -5,61 +5,166 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.*;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private int score = 0;
-    private int questionNumber = 0;
-    private HashSet<Object> arrayOfQuestions;
+    private int jayScore = 0;
+    private int jayCurrentQuestion = 0;
+    private ArrayList<Object> jayArrayOfQuestions;
+
+    //ui components
+    private Button jayBtnOption1;
+    private Button jayBtnOption2;
+    private Button jayBtnOption3;
+    private Button jayBtnOption4;
+    private TextView jayTxtViewQuestion;
+    private TextView jayTxtViewQuestionTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupViews();
-        readQuestions();
+        jaySetupViews();
+        jayReadQuestions();
     }
+
+    //region Button Delegate methods
+    @Override
+    public void onClick(View view) {
+        JSONObject object = (JSONObject) jayArrayOfQuestions.get(jayCurrentQuestion);
+        Button temp = (Button) view;
+
+        try {
+            String correctAns = object.optString(JayConstants.jayKeyAns);
+
+            if (correctAns.equalsIgnoreCase(temp.getText().toString())) {
+                jayScore++;
+            } else {
+                Log.d("wrong", "your ans is wrong");
+            }
+            jayCurrentQuestion++;
+            jayPopulateData(jayCurrentQuestion);
+        } catch (Exception e) {
+            Log.e("parser", e.getMessage());
+        }
+    }
+    //endregion
 
     //region Custom Methods
-    public void setupViews() {
-        Button option1 = (Button) findViewById(R.id.option1);
-        Button option2 = (Button) findViewById(R.id.option2);
-        Button option3 = (Button) findViewById(R.id.option3);
-        Button option4 = (Button) findViewById(R.id.option4);
-        option1.setBackgroundColor(Color.parseColor("#ffbd4a"));
-        option2.setBackgroundColor(Color.parseColor("#ffbd4a"));
-        option3.setBackgroundColor(Color.parseColor("#ffbd4a"));
-        option4.setBackgroundColor(Color.parseColor("#ffbd4a"));
+    public void jaySetupViews() {
+        // question label
+        jayTxtViewQuestion = (TextView) findViewById(R.id.jayTxtViewQuestion);
+
+        //  get all buttons
+        jayBtnOption1 = (Button) findViewById(R.id.jayBtnOption1);
+        jayBtnOption2 = (Button) findViewById(R.id.jayBtnOption2);
+        jayBtnOption3 = (Button) findViewById(R.id.jayBtnOption3);
+        jayBtnOption4 = (Button) findViewById(R.id.jayBtnOption4);
+        jayBtnOption1.setBackgroundColor(Color.parseColor("#ffbd4a"));
+        jayBtnOption2.setBackgroundColor(Color.parseColor("#ffbd4a"));
+        jayBtnOption3.setBackgroundColor(Color.parseColor("#ffbd4a"));
+        jayBtnOption4.setBackgroundColor(Color.parseColor("#ffbd4a"));
+
+        jayBtnOption1.setOnClickListener(this);
+        jayBtnOption2.setOnClickListener(this);
+        jayBtnOption3.setOnClickListener(this);
+        jayBtnOption4.setOnClickListener(this);
+
+        //tracker label
+        jayTxtViewQuestionTracker = (TextView) findViewById(R.id.jayQuestionTracker);
+
     }
 
-    public void readQuestions() {
+    public void jayToggleButtonEnable(Boolean enable) {
+        if (enable) {
+            jayBtnOption1.setEnabled(true);
+            jayBtnOption2.setEnabled(true);
+            jayBtnOption3.setEnabled(true);
+            jayBtnOption4.setEnabled(true);
+        } else {
+            jayBtnOption1.setEnabled(false);
+            jayBtnOption2.setEnabled(false);
+            jayBtnOption3.setEnabled(false);
+            jayBtnOption4.setEnabled(false);
+        }
+    }
+
+    public void jayReadQuestions() {
         String json = null;
         try {
             InputStream is = getAssets().open("data.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
-            is.close();
             json = new String(buffer, "UTF-8");
-            JSONArray arrayData = new JSONArray(json);
-            arrayOfQuestions = new HashSet<Object>(5);
+
+            JSONObject jsonRootObject = new JSONObject(json);
+            JSONArray jsonArray = jsonRootObject.optJSONArray(JayConstants.getJayKeyQuestionArray);
+            HashSet<Object> setOfQuestions;
+            setOfQuestions = new HashSet<Object>(JayConstants.jayTotalRandomQuestions);
             Random random = new Random();
-            for (int i = 0; i < arrayData.length(); i++) {
-                int randomIndex = random.nextInt(arrayData.length());
-                arrayOfQuestions.add(arrayData.getJSONObject(i));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                int randomIndex = random.nextInt(jsonArray.length());
+                if (setOfQuestions.size() == JayConstants.jayTotalRandomQuestions) {
+                    break;
+                } else {
+                    setOfQuestions.add(jsonArray.getJSONObject(randomIndex));
+                }
             }
 //            Random random = new Random();
 //            ArrayList<Object> filtered=random.ints(0,arrayData.length()).distinct().limit(5).collect(Collectors.toList());
-            Log.d("response", json);
+            jayArrayOfQuestions = new ArrayList<Object>();
+            jayArrayOfQuestions.addAll(setOfQuestions);
+            jayPopulateData(jayCurrentQuestion);
+            is.close();
         } catch (Exception e) {
             Log.e("file", "exception is " + e);
+        }
+    }
+
+    public void jayPopulateData(int currentQuestion) {
+        if (jayCurrentQuestion == jayArrayOfQuestions.size()) {
+            // push to result screen
+            Log.d("result", "score is" + jayScore);
+            jayToggleButtonEnable(false);
+        } else {
+            jayToggleButtonEnable(true);
+            JSONObject object = (JSONObject) jayArrayOfQuestions.get(currentQuestion);
+            try {
+                String question = object.getString(JayConstants.jayKeyQuestion);
+                String ans = object.getString(JayConstants.jayKeyAns);
+                JSONArray arrayOptions = object.optJSONArray(JayConstants.jayKeyOptions);
+
+                // populate the views
+                jayTxtViewQuestion.setText(question);
+                if (currentQuestion == jayArrayOfQuestions.size() - 1) {
+                    jayTxtViewQuestionTracker.setText("Almost there!!");
+                } else {
+                    jayTxtViewQuestionTracker.setText(String.format("(%d/%d)", currentQuestion + 1, jayArrayOfQuestions.size()));
+                }
+
+                Collections.shuffle(Arrays.asList(arrayOptions));
+                jayBtnOption1.setText(arrayOptions.getString(0));
+                jayBtnOption2.setText(arrayOptions.getString(1));
+                jayBtnOption3.setText(arrayOptions.getString(2));
+                jayBtnOption4.setText(arrayOptions.getString(3));
+
+            } catch (Exception e) {
+                Log.e("parsing", e.getMessage());
+            }
         }
     }
     //endregion

@@ -1,0 +1,104 @@
+{
+    "questions": [
+        {
+            "question": "What is part of a database that holds only one type of information?",
+            "options": [
+                "Report",
+                "Field",
+                "Record",
+                "File"
+            ],
+            "ans": "Field"
+        },
+        {
+            "question": "'OS' computer abbreviation usually means?",
+            "options": [
+                "Order of Significance ",
+                "Open Software",
+                "Operating System",
+                "Optical Sensor"
+            ],
+            "ans": "Operating System"
+        },
+        {
+            "question": "'.MOV' extension refers usually to what kind of file?",
+            "options": [
+                "Image file",
+                "Animation/movie file",
+                "Audio file",
+                "MS Office document"
+            ],
+            "ans": "Animation/movie file"
+        },
+        {
+            "question": "Which is a type of Electrically-Erasable Programmable Read-Only Memory?",
+            "options": [
+                "Flash",
+                "Flange",
+                "Fury",
+                "FRAM"
+            ],
+            "ans": "Flash"
+        },
+        {
+            "question": "'.MPG' extension refers usually to what kind of file?",
+            "options": [
+                "WordPerfect Document file",
+                "MS Office document",
+                "Animation/movie file",
+                "Image file"
+            ],
+            "ans": "Animation/movie file"
+        },
+        {
+            "question": "Who developed Yahoo?",
+            "options": [
+                "Dennis Ritchie,Ken Thompson",
+                "David Filo,Jerry Yang",
+                "Vint Cerf,Robert Kahn",
+                "Steve Case,Jeff Bezos"
+            ],
+            "ans": "David Filo,Jerry Yang"
+        },
+        {
+            "question": "The most common format for a home video recorder is VHS. VHS stands for...?",
+            "options": [
+                "Video Home System",
+                "Very high speed",
+                "Video horizontal standard",
+                "Voltage house standard"
+            ],
+            "ans": "Video Home System"
+        },
+        {
+            "question": "'DB' computer abbreviation usually means?",
+            "options": [
+                "Database",
+                "Double Byte",
+                "Data Block",
+                "Driver Boot"
+            ],
+            "ans": "Database"
+        },
+        {
+            "question": "Who co-founded Hotmail in 1996 and then sold the company to Microsoft?",
+            "options": [
+                "Shawn Fanning",
+                "Ada Byron Lovelace",
+                "Sabeer Bhatia",
+                "Ray Tomlinson"
+            ],
+            "ans": "Sabeer Bhatia"
+        },
+        {
+            "question": "In the UK, what type of installation requires a fireman's switch?",
+            "options": [
+                "Neon Lighting",
+                "High Pressure Sodium Lighting",
+                "Water Features",
+                "Hotel Rooms"
+            ],
+            "ans": "Neon Lighting"
+        }
+    ]
+}
