@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">QUIZILLA</string>
+    <string name="title_activity_jay_main">JayMainActivity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="rules">Rules: Just Get all questions right...silly!!</string>
 </resources>

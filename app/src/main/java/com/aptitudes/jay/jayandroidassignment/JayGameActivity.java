@@ -1,7 +1,6 @@
 package com.aptitudes.jay.jayandroidassignment;
 
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class JayGameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private int jayScore = 0;
     private int jayCurrentQuestion = 0;
@@ -36,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.jay_activity_game);
         jaySetupViews();
         jayReadQuestions();
     }
