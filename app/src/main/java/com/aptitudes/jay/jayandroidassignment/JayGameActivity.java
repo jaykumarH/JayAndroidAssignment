@@ -1,5 +1,6 @@
 package com.aptitudes.jay.jayandroidassignment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -138,6 +139,9 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
             // push to result screen
             Log.d("result", "score is" + jayScore);
             jayToggleButtonEnable(false);
+            Intent intent = new Intent(JayGameActivity.this, JayResultActivity.class);
+            intent.putExtra("score", jayScore);
+            startActivity(intent);
         } else {
             jayToggleButtonEnable(true);
             JSONObject object = (JSONObject) jayArrayOfQuestions.get(currentQuestion);
