@@ -1,7 +1,9 @@
 package com.aptitudes.jay.jayandroidassignment;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,6 +21,14 @@ public class JayResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_jay_result);
         jaySetupViews();
 
+        jayBtnRetakeQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(JayResultActivity.this, JayGameActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void jaySetupViews() {
@@ -27,7 +37,9 @@ public class JayResultActivity extends AppCompatActivity {
         jayBtnRetakeQuiz = (Button) findViewById(R.id.buttonRetakeQuiz);
 
         int userScore = getIntent().getExtras().getInt("score");
-        jayTxtViewScore.setText(String.format("You scored %d out of %d correct questions", userScore, 5));
+        jayTxtViewScore.setText(String.format("You scored %d out of %d correct questions", userScore, JayConstants.jayTotalRandomQuestions));
+
+
     }
 
 }
