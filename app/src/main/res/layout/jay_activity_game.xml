@@ -20,15 +20,14 @@
         android:weightSum="1">
 
         <TextView
+            style="@style/textView"
             android:id="@+id/jayTxtViewQuestion"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.28"
-            android:text="Large Text"
-            android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/colorQuestion" />
+             />
 
         <Button
             android:id="@+id/jayBtnOption1"
@@ -36,10 +35,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="3dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.12"
             android:layout_marginTop="5dp"
             android:background="@drawable/buttonstyle"
-            android:text="New Button">
+           >
 
         </Button>
 
@@ -49,9 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="3dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.12"
             android:background="@drawable/buttonstyle"
-            android:text="New Button" />
+            />
 
         <Button
             android:id="@+id/jayBtnOption3"
@@ -59,28 +58,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="3dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.12"
             android:background="@drawable/buttonstyle"
-            android:text="New Button" />
+           />
 
         <Button
             android:id="@+id/jayBtnOption4"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:layout_weight="0.15"
+            android:layout_weight="0.12"
             android:background="@drawable/buttonstyle"
-            android:text="New Button"></Button>
+            ></Button>
 
         <TextView
+            style="@style/textView"
             android:id="@+id/jayQuestionTracker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
-            android:textAlignment="center"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/colorQuestion" />
+            />
 
     </LinearLayout>
 

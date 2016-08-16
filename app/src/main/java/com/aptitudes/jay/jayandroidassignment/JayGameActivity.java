@@ -2,6 +2,7 @@ package com.aptitudes.jay.jayandroidassignment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
     private Button jayBtnOption4;
     private TextView jayTxtViewQuestion;
     private TextView jayTxtViewQuestionTracker;
+    private MediaPlayer mp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
     //region Button Delegate methods
     @Override
     public void onClick(View view) {
+
         JSONObject object = (JSONObject) jayArrayOfQuestions.get(jayCurrentQuestion);
         Button temp = (Button) view;
 
@@ -51,8 +54,12 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
 
             if (correctAns.equalsIgnoreCase(temp.getText().toString())) {
                 jayScore++;
+                mp = MediaPlayer.create(this, R.raw.win);
+                mp.start();
             } else {
                 Log.d("wrong", "your ans is wrong");
+                mp = MediaPlayer.create(this, R.raw.loose);
+                mp.start();
             }
             jayCurrentQuestion++;
             jayPopulateData(jayCurrentQuestion);
@@ -137,8 +144,8 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
     public void jayPopulateData(int currentQuestion) {
         if (jayCurrentQuestion == jayArrayOfQuestions.size()) {
             // push to result screen
-            Log.d("result", "score is" + jayScore);
             jayToggleButtonEnable(false);
+            mp.stop();
             Intent intent = new Intent(JayGameActivity.this, JayResultActivity.class);
             intent.putExtra("score", jayScore);
             startActivity(intent);
