@@ -145,7 +145,11 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
         if (jayCurrentQuestion == jayArrayOfQuestions.size()) {
             // push to result screen
             jayToggleButtonEnable(false);
-            mp.stop();
+            if(mp != null) {
+                mp.stop();
+                mp.reset();
+                mp.release();
+            }
             Intent intent = new Intent(JayGameActivity.this, JayResultActivity.class);
             intent.putExtra("score", jayScore);
             startActivity(intent);

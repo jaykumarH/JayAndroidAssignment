@@ -28,7 +28,11 @@ public class JayResultActivity extends AppCompatActivity {
         jayBtnRetakeQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mp.stop();
+                if(mp != null) {
+                    mp.stop();
+                    mp.reset();
+                    mp.release();
+                }
                 Intent intent = new Intent(JayResultActivity.this, JayGameActivity.class);
                 startActivity(intent);
             }
