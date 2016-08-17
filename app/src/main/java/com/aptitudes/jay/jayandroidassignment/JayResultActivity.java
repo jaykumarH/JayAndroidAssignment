@@ -54,7 +54,7 @@ public class JayResultActivity extends AppCompatActivity {
         String name = pref.getString(JayConstants.userNameKey, "");
         int savedScore = pref.getInt(JayConstants.userScoreKey, -1);
 
-        if (savedScore > 0) {
+        if (savedScore >= 0) {
             txtViewPrevScore.setText(String.format("Hey %s your previous Score was: %d", name, savedScore));
         }
 

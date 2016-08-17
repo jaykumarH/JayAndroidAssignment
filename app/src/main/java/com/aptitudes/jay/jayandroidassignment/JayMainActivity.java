@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class JayMainActivity extends AppCompatActivity {
 
@@ -26,29 +27,46 @@ public class JayMainActivity extends AppCompatActivity {
 
         editTextName = (EditText) findViewById(R.id.editTextName);
         btnPlay = (Button) findViewById(R.id.buttonPlayNow);
-        btnPlay.setVisibility(View.GONE);
         txtViewRules = (TextView) findViewById(R.id.textViewRules);
 
         pref = getSharedPreferences(JayConstants.prefKeyName, MODE_PRIVATE);
+        String name=pref.getString(JayConstants.userNameKey,"");
+        if (name.length()>0)
+        {
+            txtViewRules.setText(String.format("Good to see you back %s!!!",name.toUpperCase()));
+            btnPlay.setVisibility(View.VISIBLE);
+            editTextName.setVisibility(View.GONE);
+        }
+        else
+        {
+            btnPlay.setVisibility(View.GONE);
+            editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    if (i == EditorInfo.IME_ACTION_DONE || i == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                        if (editTextName.getText().toString().length()>0)
+                        {
+                            btnPlay.setVisibility(View.VISIBLE);
+                            editTextName.setVisibility(View.GONE);
 
-        editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE || i == EditorInfo.IME_ACTION_UNSPECIFIED) {
-                    btnPlay.setVisibility(View.VISIBLE);
-                    editTextName.setVisibility(View.GONE);
+                            String name = editTextName.getText().toString();
+                            Editor edit = pref.edit();
+                            edit.putString(JayConstants.userNameKey, name);
+                            edit.putInt(JayConstants.userScoreKey, -1);
+                            edit.commit();
 
-                    String name = editTextName.getText().toString();
-                    Editor edit = pref.edit();
-                    edit.putString(JayConstants.userNameKey, name);
-                    edit.putInt(JayConstants.userScoreKey, -1);
-                    edit.commit();
+                            txtViewRules.setText(String.format("Thank you %s..your are good to go!!", name));
+                        }
+                        else
+                        {
+                            Toast.makeText(JayMainActivity.this, "Enter your name sweety!!!", Toast.LENGTH_SHORT).show();
+                        }
 
-                    txtViewRules.setText(String.format("Thank you %s..your are good to go!!", name));
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
+        }
         btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
