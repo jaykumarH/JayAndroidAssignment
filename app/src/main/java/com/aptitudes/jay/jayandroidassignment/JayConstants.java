@@ -13,4 +13,7 @@ public class JayConstants {
     public static String jayGoodJob = "Good job!";
     public static String jayExcellent = "Excellent work!";
     public static String jayGenius = "You are a genius!";
+    public static String prefKeyName = "userDetails";
+    public static String userNameKey = "userName";
+    public static String userScoreKey = "userScore";
 }

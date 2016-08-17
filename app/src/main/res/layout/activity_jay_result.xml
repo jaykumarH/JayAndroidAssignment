@@ -48,6 +48,15 @@
             android:layout_marginTop="20dp"
              />
 
+        <TextView
+            style="@style/textView"
+            android:id="@+id/textViewPrevScore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textColor="#bbb215" />
+
         <Button
             android:id="@+id/buttonRetakeQuiz"
             android:layout_width="wrap_content"

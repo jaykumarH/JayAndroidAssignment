@@ -1,6 +1,8 @@
 package com.aptitudes.jay.jayandroidassignment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ public class JayResultActivity extends AppCompatActivity {
     private Button jayBtnRetakeQuiz;
     private RatingBar jayRatingBar;
     private MediaPlayer mp;
+    private TextView txtViewPrevScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +31,7 @@ public class JayResultActivity extends AppCompatActivity {
         jayBtnRetakeQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mp != null) {
+                if (mp != null) {
                     mp.stop();
                     mp.reset();
                     mp.release();
@@ -45,10 +48,23 @@ public class JayResultActivity extends AppCompatActivity {
         jayTxtViewScore = (TextView) findViewById(R.id.textViewResult);
         jayBtnRetakeQuiz = (Button) findViewById(R.id.buttonRetakeQuiz);
         jayRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+        txtViewPrevScore = (TextView) findViewById(R.id.textViewPrevScore);
+
+        SharedPreferences pref = getSharedPreferences(JayConstants.prefKeyName, MODE_PRIVATE);
+        String name = pref.getString(JayConstants.userNameKey, "");
+        int savedScore = pref.getInt(JayConstants.userScoreKey, -1);
+
+        if (savedScore > 0) {
+            txtViewPrevScore.setText(String.format("Hey %s your previous Score was: %d", name, savedScore));
+        }
 
         int userScore = getIntent().getExtras().getInt("score");
         jayTxtViewScore.setText(String.format("You scored %d out of %d correct questions", userScore, JayConstants.jayTotalRandomQuestions));
         jayRatingBar.setRating(userScore);
+
+        Editor editor = pref.edit();
+        editor.putInt(JayConstants.userScoreKey, userScore);
+        editor.commit();
 
         switch (userScore) {
             case 0:
