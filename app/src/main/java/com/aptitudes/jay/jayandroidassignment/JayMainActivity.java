@@ -3,15 +3,19 @@ package com.aptitudes.jay.jayandroidassignment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 public class JayMainActivity extends AppCompatActivity {
 
@@ -29,23 +33,23 @@ public class JayMainActivity extends AppCompatActivity {
         btnPlay = (Button) findViewById(R.id.buttonPlayNow);
         txtViewRules = (TextView) findViewById(R.id.textViewRules);
 
-        pref = getSharedPreferences(JayConstants.prefKeyName, MODE_PRIVATE);
-        String name=pref.getString(JayConstants.userNameKey,"");
-        if (name.length()>0)
-        {
-            txtViewRules.setText(String.format("Good to see you back %s!!!",name.toUpperCase()));
+        PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
+
+//        pref = getSharedPreferences(JayConstants.prefKeyName, MODE_PRIVATE);
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String name = pref.getString(JayConstants.userNameKey, "");
+        if (name.length() > 0) {
+            txtViewRules.setText(String.format("Good to see you back %s!!!", name.toUpperCase()));
             btnPlay.setVisibility(View.VISIBLE);
             editTextName.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             btnPlay.setVisibility(View.GONE);
             editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                     if (i == EditorInfo.IME_ACTION_DONE || i == EditorInfo.IME_ACTION_UNSPECIFIED) {
-                        if (editTextName.getText().toString().length()>0)
-                        {
+                        if (editTextName.getText().toString().length() > 0) {
                             btnPlay.setVisibility(View.VISIBLE);
                             editTextName.setVisibility(View.GONE);
 
@@ -56,9 +60,7 @@ public class JayMainActivity extends AppCompatActivity {
                             edit.commit();
 
                             txtViewRules.setText(String.format("Thank you %s..your are good to go!!", name));
-                        }
-                        else
-                        {
+                        } else {
                             Toast.makeText(JayMainActivity.this, "Enter your name sweety!!!", Toast.LENGTH_SHORT).show();
                         }
 
@@ -74,6 +76,24 @@ public class JayMainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.jay_settings_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_settings:
+                Intent intent=new Intent(this,SettingsActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.aptitudes.jay.jayandroidassignment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
     private TextView jayTxtViewQuestion;
     private TextView jayTxtViewQuestionTracker;
     private MediaPlayer mp;
+    private SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,14 +120,21 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
             is.read(buffer);
             json = new String(buffer, "UTF-8");
 
+            pref= PreferenceManager.getDefaultSharedPreferences(this);
+            int totalQ=Integer.parseInt(pref.getString("pref_questionTotal","5"));
+            if (totalQ>5)
+            {
+                totalQ=5;
+            }
+
             JSONObject jsonRootObject = new JSONObject(json);
             JSONArray jsonArray = jsonRootObject.optJSONArray(JayConstants.getJayKeyQuestionArray);
             HashSet<Object> setOfQuestions;
-            setOfQuestions = new HashSet<Object>(JayConstants.jayTotalRandomQuestions);
+            setOfQuestions = new HashSet<Object>(totalQ);
             Random random = new Random();
             for (int i = 0; i < jsonArray.length(); i++) {
                 int randomIndex = random.nextInt(jsonArray.length());
-                if (setOfQuestions.size() == JayConstants.jayTotalRandomQuestions) {
+                if (setOfQuestions.size() == totalQ) {
                     break;
                 } else {
                     setOfQuestions.add(jsonArray.getJSONObject(randomIndex));
