@@ -65,7 +65,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
                 json = new String(buffer, "UTF-8");
 
                 pref = PreferenceManager.getDefaultSharedPreferences(JayGameActivity.this);
-                int totalQ = Integer.parseInt(pref.getString("pref_questionTotal", "5"));
+                int totalQ = Integer.parseInt(pref.getString(JayConstants.jayPrefTotalQ, "5"));
                 if (totalQ > 5) {
                     totalQ = 5;
                 }

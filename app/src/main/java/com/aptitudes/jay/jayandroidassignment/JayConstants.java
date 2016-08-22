@@ -17,4 +17,5 @@ public class JayConstants {
     public static String prefKeyName = "userDetails";
     public static String userNameKey = "userName";
     public static String userScoreKey = "userScore";
+    public static String jayPrefTotalQ="pref_questionTotal";
 }
