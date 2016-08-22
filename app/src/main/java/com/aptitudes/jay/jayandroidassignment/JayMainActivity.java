@@ -3,9 +3,9 @@ package com.aptitudes.jay.jayandroidassignment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,8 +34,6 @@ public class JayMainActivity extends AppCompatActivity {
         txtViewRules = (TextView) findViewById(R.id.textViewRules);
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
-
-//        pref = getSharedPreferences(JayConstants.prefKeyName, MODE_PRIVATE);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
 
         String name = pref.getString(JayConstants.userNameKey, "");
@@ -87,7 +85,7 @@ public class JayMainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_settings:
-                Intent intent=new Intent(this,SettingsActivity.class);
+                Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 break;
             default:
@@ -95,5 +93,4 @@ public class JayMainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

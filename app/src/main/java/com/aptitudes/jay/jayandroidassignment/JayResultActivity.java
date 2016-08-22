@@ -4,14 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.media.MediaPlayer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 public class JayResultActivity extends AppCompatActivity {
 
@@ -40,7 +39,6 @@ public class JayResultActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     public void jaySetupViews() {
@@ -49,8 +47,8 @@ public class JayResultActivity extends AppCompatActivity {
         jayBtnRetakeQuiz = (Button) findViewById(R.id.buttonRetakeQuiz);
         jayRatingBar = (RatingBar) findViewById(R.id.ratingBar);
         txtViewPrevScore = (TextView) findViewById(R.id.textViewPrevScore);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 
-        SharedPreferences pref = getSharedPreferences(JayConstants.prefKeyName, MODE_PRIVATE);
         String name = pref.getString(JayConstants.userNameKey, "");
         int savedScore = pref.getInt(JayConstants.userScoreKey, -1);
 
@@ -91,7 +89,6 @@ public class JayResultActivity extends AppCompatActivity {
                 break;
             default:
                 jayTxtViewMessage.setText("");
-
         }
     }
 }
