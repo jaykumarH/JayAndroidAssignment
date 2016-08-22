@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,14 +40,66 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
     private TextView jayTxtViewQuestionTracker;
     private MediaPlayer mp;
     private SharedPreferences pref;
+    private AsyncTask<String, Void, Void> execute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.jay_activity_game);
         jaySetupViews();
-        jayReadQuestions();
+        //jayReadQuestions();
+        new JayParseJson().execute(JayConstants.jayJSONFileName);
     }
+
+    //region Async task class- File data fetch
+    class JayParseJson extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... strings) {
+            String fileName = strings[0];
+            String json = null;
+            try {
+                InputStream is = getAssets().open(fileName);
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                json = new String(buffer, "UTF-8");
+
+                pref = PreferenceManager.getDefaultSharedPreferences(JayGameActivity.this);
+                int totalQ = Integer.parseInt(pref.getString("pref_questionTotal", "5"));
+                if (totalQ > 5) {
+                    totalQ = 5;
+                }
+
+                JSONObject jsonRootObject = new JSONObject(json);
+                JSONArray jsonArray = jsonRootObject.optJSONArray(JayConstants.getJayKeyQuestionArray);
+                HashSet<Object> setOfQuestions;
+                setOfQuestions = new HashSet<Object>(totalQ);
+                Random random = new Random();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    int randomIndex = random.nextInt(jsonArray.length());
+                    if (setOfQuestions.size() == totalQ) {
+                        break;
+                    } else {
+                        setOfQuestions.add(jsonArray.getJSONObject(randomIndex));
+                    }
+                }
+                jayArrayOfQuestions = new ArrayList<Object>();
+                jayArrayOfQuestions.addAll(setOfQuestions);
+                is.close();
+            } catch (Exception e) {
+                Log.e("file", "exception is " + e);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            jayPopulateData(jayCurrentQuestion);
+        }
+
+    }
+    //endregion
 
     //region Button Delegate methods
     @Override
@@ -52,21 +107,27 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
 
         JSONObject object = (JSONObject) jayArrayOfQuestions.get(jayCurrentQuestion);
         Button temp = (Button) view;
-
+        Animation btnAnimation;
         try {
+//            temp.setBackgroundColor(Color.GREEN);
+            btnAnimation = AnimationUtils.loadAnimation(this, R.anim.alpha_animation);
             String correctAns = object.optString(JayConstants.jayKeyAns);
-
             if (correctAns.equalsIgnoreCase(temp.getText().toString())) {
                 jayScore++;
                 mp = MediaPlayer.create(this, R.raw.win);
                 mp.start();
             } else {
                 Log.d("wrong", "your ans is wrong");
+//                temp.setBackgroundColor(Color.RED);
+                btnAnimation = AnimationUtils.loadAnimation(this, R.anim.spring_animation);
                 mp = MediaPlayer.create(this, R.raw.loose);
                 mp.start();
             }
+            view.startAnimation(btnAnimation);
             jayCurrentQuestion++;
             jayPopulateData(jayCurrentQuestion);
+//            temp.setBackgroundColor(getResources().getColor(R.color.colorbButtonBg));
+
         } catch (Exception e) {
             Log.e("parser", e.getMessage());
         }
@@ -112,7 +173,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void jayReadQuestions() {
+   /* public void jayReadQuestions() {
         String json = null;
         try {
             InputStream is = getAssets().open("data.json");
@@ -150,13 +211,13 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
         } catch (Exception e) {
             Log.e("file", "exception is " + e);
         }
-    }
+    }*/
 
     public void jayPopulateData(int currentQuestion) {
         if (jayCurrentQuestion == jayArrayOfQuestions.size()) {
             // push to result screen
             jayToggleButtonEnable(false);
-            if(mp != null) {
+            if (mp != null) {
                 mp.stop();
                 mp.reset();
                 mp.release();

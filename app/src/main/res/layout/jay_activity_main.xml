@@ -45,9 +45,10 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/editTextName"
-        android:hint="your name sweety"
+        android:hint="@string/textHint"
         android:layout_below="@+id/textViewRules"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:textColor="#f8f7b5">
         <requestFocus></requestFocus>
     </EditText>
 

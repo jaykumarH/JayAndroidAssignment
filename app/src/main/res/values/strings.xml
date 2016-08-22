@@ -7,6 +7,7 @@
     <string name="totalQuestions">Total Questions</string>
     <string name="maxTotal">Max total is 10</string>
     <string name="title_activity_jay_settings">Settings</string>
+    <string name="textHint"><i>your name sweety...</i></string>
 
     <!-- Strings related to Settings -->
 
