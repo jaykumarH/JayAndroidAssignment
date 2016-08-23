@@ -47,7 +47,6 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.jay_activity_game);
         jaySetupViews();
-        //jayReadQuestions();
         new JayParseJson().execute(JayConstants.jayJSONFileName);
     }
 
@@ -66,16 +65,13 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
 
                 pref = PreferenceManager.getDefaultSharedPreferences(JayGameActivity.this);
                 int totalQ = Integer.parseInt(pref.getString(JayConstants.jayPrefTotalQ, "5"));
-                if (totalQ > 5) {
-                    totalQ = 5;
-                }
 
                 JSONObject jsonRootObject = new JSONObject(json);
                 JSONArray jsonArray = jsonRootObject.optJSONArray(JayConstants.getJayKeyQuestionArray);
                 HashSet<Object> setOfQuestions;
                 setOfQuestions = new HashSet<Object>(totalQ);
                 Random random = new Random();
-                for (int i = 0; i < jsonArray.length(); i++) {
+                for (int i = 0; i < jsonArray.length()*2; i++) {
                     int randomIndex = random.nextInt(jsonArray.length());
                     if (setOfQuestions.size() == totalQ) {
                         break;
@@ -172,46 +168,6 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
             jayBtnOption4.setEnabled(false);
         }
     }
-
-   /* public void jayReadQuestions() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("data.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            json = new String(buffer, "UTF-8");
-
-            pref= PreferenceManager.getDefaultSharedPreferences(this);
-            int totalQ=Integer.parseInt(pref.getString("pref_questionTotal","5"));
-            if (totalQ>5)
-            {
-                totalQ=5;
-            }
-
-            JSONObject jsonRootObject = new JSONObject(json);
-            JSONArray jsonArray = jsonRootObject.optJSONArray(JayConstants.getJayKeyQuestionArray);
-            HashSet<Object> setOfQuestions;
-            setOfQuestions = new HashSet<Object>(totalQ);
-            Random random = new Random();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                int randomIndex = random.nextInt(jsonArray.length());
-                if (setOfQuestions.size() == totalQ) {
-                    break;
-                } else {
-                    setOfQuestions.add(jsonArray.getJSONObject(randomIndex));
-                }
-            }
-//            Random random = new Random();
-//            ArrayList<Object> filtered=random.ints(0,arrayData.length()).distinct().limit(5).collect(Collectors.toList());
-            jayArrayOfQuestions = new ArrayList<Object>();
-            jayArrayOfQuestions.addAll(setOfQuestions);
-            jayPopulateData(jayCurrentQuestion);
-            is.close();
-        } catch (Exception e) {
-            Log.e("file", "exception is " + e);
-        }
-    }*/
 
     public void jayPopulateData(int currentQuestion) {
         if (jayCurrentQuestion == jayArrayOfQuestions.size()) {

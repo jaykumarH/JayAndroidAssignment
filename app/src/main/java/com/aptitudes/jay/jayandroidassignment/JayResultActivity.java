@@ -1,11 +1,17 @@
 package com.aptitudes.jay.jayandroidassignment;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -46,8 +52,11 @@ public class JayResultActivity extends AppCompatActivity {
         jayTxtViewScore = (TextView) findViewById(R.id.textViewResult);
         jayBtnRetakeQuiz = (Button) findViewById(R.id.buttonRetakeQuiz);
         jayRatingBar = (RatingBar) findViewById(R.id.ratingBar);
+
         txtViewPrevScore = (TextView) findViewById(R.id.textViewPrevScore);
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        int totalQ = Integer.parseInt(pref.getString(JayConstants.jayPrefTotalQ, "5"));
+
 
         String name = pref.getString(JayConstants.userNameKey, "");
         int savedScore = pref.getInt(JayConstants.userScoreKey, -1);
@@ -57,7 +66,8 @@ public class JayResultActivity extends AppCompatActivity {
         }
 
         int userScore = getIntent().getExtras().getInt("score");
-        jayTxtViewScore.setText(String.format("You scored %d out of %d correct questions", userScore, JayConstants.jayTotalRandomQuestions));
+        jayTxtViewScore.setText(String.format("You scored %d out of %d correct questions", userScore, totalQ));
+        jayRatingBar.setNumStars(totalQ);
         jayRatingBar.setRating(userScore);
 
         Editor editor = pref.edit();
