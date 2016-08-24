@@ -67,8 +67,21 @@ public class JayResultActivity extends AppCompatActivity {
 
         int userScore = getIntent().getExtras().getInt("score");
         jayTxtViewScore.setText(String.format("You scored %d out of %d correct questions", userScore, totalQ));
-        jayRatingBar.setNumStars(totalQ);
-        jayRatingBar.setRating(userScore);
+        jayRatingBar.setNumStars(JayConstants.jayTotalRandomQuestions);
+        float score = userScore * 100 / totalQ;
+        if (score >= 90) {
+            jayRatingBar.setRating(5);
+        } else if (score >= 70 && score < 90) {
+            jayRatingBar.setRating(4);
+        } else if (score >= 50 && score < 70) {
+            jayRatingBar.setRating(3);
+        } else if (score > 30 && score <= 50) {
+            jayRatingBar.setRating(2);
+        } else if (score > 0 && score <= 20) {
+            jayRatingBar.setRating(1);
+        } else {
+            jayRatingBar.setRating(0);
+        }
 
         Editor editor = pref.edit();
         editor.putInt(JayConstants.userScoreKey, userScore);
