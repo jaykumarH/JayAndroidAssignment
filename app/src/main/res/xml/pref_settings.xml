@@ -6,4 +6,9 @@
         android:summary="@string/maxTotal"
         android:defaultValue="5"
         android:inputType="number"/>
+    <CheckBoxPreference
+        android:key="pref_rememberMe"
+        android:title="Remember Me"
+        android:summary="You are remembered by us!"
+        android:defaultValue="false"/>
 </PreferenceScreen>

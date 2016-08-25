@@ -7,6 +7,7 @@ import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class JayGameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,7 +74,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
                 HashSet<Object> setOfQuestions;
                 setOfQuestions = new HashSet<Object>(totalQ);
                 Random random = new Random();
-                for (int i = 0; i < jsonArray.length()*2; i++) {
+                for (int i = 0; i < jsonArray.length() * 2; i++) {
                     int randomIndex = random.nextInt(jsonArray.length());
                     if (setOfQuestions.size() == totalQ) {
                         break;
@@ -105,7 +108,7 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
         Button temp = (Button) view;
         Animation btnAnimation;
         try {
-//            temp.setBackgroundColor(Color.GREEN);
+            temp.setBackgroundColor(Color.GREEN);
             btnAnimation = AnimationUtils.loadAnimation(this, R.anim.alpha_animation);
             String correctAns = object.optString(JayConstants.jayKeyAns);
             if (correctAns.equalsIgnoreCase(temp.getText().toString())) {
@@ -114,15 +117,26 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
                 mp.start();
             } else {
                 Log.d("wrong", "your ans is wrong");
-//                temp.setBackgroundColor(Color.RED);
+                temp.setBackgroundColor(Color.RED);
                 btnAnimation = AnimationUtils.loadAnimation(this, R.anim.spring_animation);
                 mp = MediaPlayer.create(this, R.raw.loose);
                 mp.start();
             }
             view.startAnimation(btnAnimation);
             jayCurrentQuestion++;
-            jayPopulateData(jayCurrentQuestion);
-//            temp.setBackgroundColor(getResources().getColor(R.color.colorbButtonBg));
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            jayPopulateData(jayCurrentQuestion);
+                        }
+                    });
+                }
+            };
+            Timer timer = new Timer(true);
+            timer.schedule(task, 300);
 
         } catch (Exception e) {
             Log.e("parser", e.getMessage());
@@ -140,11 +154,8 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
         jayBtnOption2 = (Button) findViewById(R.id.jayBtnOption2);
         jayBtnOption3 = (Button) findViewById(R.id.jayBtnOption3);
         jayBtnOption4 = (Button) findViewById(R.id.jayBtnOption4);
-        jayBtnOption1.setBackgroundColor(Color.parseColor("#ffbd4a"));
-        jayBtnOption2.setBackgroundColor(Color.parseColor("#ffbd4a"));
-        jayBtnOption3.setBackgroundColor(Color.parseColor("#ffbd4a"));
-        jayBtnOption4.setBackgroundColor(Color.parseColor("#ffbd4a"));
 
+        jaySetButtonDefaultColor();
         jayBtnOption1.setOnClickListener(this);
         jayBtnOption2.setOnClickListener(this);
         jayBtnOption3.setOnClickListener(this);
@@ -183,6 +194,8 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
             startActivity(intent);
         } else {
             jayToggleButtonEnable(true);
+            jaySetButtonDefaultColor();
+
             JSONObject object = (JSONObject) jayArrayOfQuestions.get(currentQuestion);
             try {
                 String question = object.getString(JayConstants.jayKeyQuestion);
@@ -207,6 +220,13 @@ public class JayGameActivity extends AppCompatActivity implements View.OnClickLi
                 Log.e("parsing", e.getMessage());
             }
         }
+    }
+
+    public void jaySetButtonDefaultColor() {
+        jayBtnOption1.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbButtonBg));
+        jayBtnOption2.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbButtonBg));
+        jayBtnOption3.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbButtonBg));
+        jayBtnOption4.setBackgroundColor(ContextCompat.getColor(this, R.color.colorbButtonBg));
     }
     //endregion
 }

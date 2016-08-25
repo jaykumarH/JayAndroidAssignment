@@ -1,11 +1,12 @@
 package com.aptitudes.jay.jayandroidassignment;
 
 import android.content.SharedPreferences;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 public class SettingsActivity extends PreferenceActivity {
 
     private EditTextPreference editText;
+    private CheckBoxPreference checkBoxPreference;
     private SharedPreferences pref;
 
     @SuppressWarnings("deprecation")
@@ -23,9 +25,10 @@ public class SettingsActivity extends PreferenceActivity {
 
         pref = PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this);
         editText = (EditTextPreference) findPreference(JayConstants.jayPrefTotalQ);
-//        editText.setSummary(editText.getText().toString());
-        editText.setSummary(String.format("Current total is:%s", editText.getText().toString()));
+        checkBoxPreference = (CheckBoxPreference) findPreference(JayConstants.jayPrefRememberMe);
 
+        editText.setSummary(String.format("Current total is:%s", editText.getText().toString()));
+        checkBoxPreference.setChecked(true);
 
         editText.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -51,5 +54,25 @@ public class SettingsActivity extends PreferenceActivity {
                 return false;
             }
         });
+
+        checkBoxPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object o) {
+                boolean myValue = (Boolean) o;
+                Editor edit = pref.edit();
+                edit.clear();
+                edit.commit();
+
+                if (myValue) {
+                    checkBoxPreference.setSummary(JayConstants.jayTextRememberMe);
+                    checkBoxPreference.setChecked(true);
+                } else {
+                    checkBoxPreference.setSummary(JayConstants.jayTextRememberMeNOT);
+                    checkBoxPreference.setChecked(false);
+                }
+                return false;
+            }
+        });
+
     }
 }

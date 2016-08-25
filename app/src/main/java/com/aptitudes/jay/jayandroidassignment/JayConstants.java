@@ -18,4 +18,9 @@ public class JayConstants {
     public static String userNameKey = "userName";
     public static String userScoreKey = "userScore";
     public static String jayPrefTotalQ="pref_questionTotal";
+    public static String jayPrefRememberMe="pref_rememberMe";
+    public static String jayTextRememberMe="You will be remembered!";
+    public static String jayTextRememberMeNOT="check to remember your settings!!";
+
+
 }

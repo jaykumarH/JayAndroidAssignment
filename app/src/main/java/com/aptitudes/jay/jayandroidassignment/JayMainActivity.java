@@ -1,5 +1,6 @@
 package com.aptitudes.jay.jayandroidassignment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -28,13 +29,26 @@ public class JayMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.jay_activity_main);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        jaySetupView();
+    }
+
+    //region Custom Methods
+    public void jaySetupView() {
         editTextName = (EditText) findViewById(R.id.editTextName);
         btnPlay = (Button) findViewById(R.id.buttonPlayNow);
         txtViewRules = (TextView) findViewById(R.id.textViewRules);
 
         PreferenceManager.setDefaultValues(this, R.xml.pref_settings, false);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String rules = this.getResources().getString(R.string.rules);
+        txtViewRules.setText(rules);
+
 
         String name = pref.getString(JayConstants.userNameKey, "");
         if (name.length() > 0) {
@@ -43,6 +57,7 @@ public class JayMainActivity extends AppCompatActivity {
             editTextName.setVisibility(View.GONE);
         } else {
             btnPlay.setVisibility(View.GONE);
+            editTextName.setVisibility(View.VISIBLE);
             editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
                 public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -75,7 +90,9 @@ public class JayMainActivity extends AppCompatActivity {
             }
         });
     }
+    //endregion
 
+    //region Menu Methods
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.jay_settings_menu, menu);
@@ -93,4 +110,7 @@ public class JayMainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+    //endregion
+
+
 }
